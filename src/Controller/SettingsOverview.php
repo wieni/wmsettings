@@ -133,12 +133,28 @@ class SettingsOverview extends ControllerBase
                                 [
                                     'query' => [
                                         'destination' => Url::fromRoute(
-                                            "wmsettings.settings"
+                                            "wmsettings.content"
                                         )->toString(),
                                     ]
                                 ]
                             ),
                             'title' => $this->t('Edit'),
+                        ],
+                        'translate' => [
+                            'url' => Url::fromRoute(
+                                'entity.' . $this->wmSettings->getEntityType() . '.content_translation_overview',
+                                [
+                                    'settings' => $value->id(),
+                                ],
+                                [
+                                    'query' => [
+                                        'destination' => Url::fromRoute(
+                                            "wmsettings.content"
+                                        )->toString(),
+                                    ]
+                                ]
+                            ),
+                            'title' => $this->t('Translate'),
                         ],
                     ]
                 ]

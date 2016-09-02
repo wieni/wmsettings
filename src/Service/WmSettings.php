@@ -5,6 +5,7 @@ namespace Drupal\wmsettings\Service;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -54,6 +55,13 @@ class WmSettings
     protected $config_editable;
 
     /**
+     * The entity repository.
+     *
+     * @var \Drupal\Core\Entity\EntityRepositoryInterface
+     */
+    protected $entityRepository;
+
+    /**
      * Constructs a WmContentManageAccessCheck object.
      *
      * @param \Drupal\Core\Entity\EntityManagerInterface $manager
@@ -70,7 +78,8 @@ class WmSettings
         EntityTypeManagerInterface $entityTypeManager,
         QueryFactory $query,
         LanguageManagerInterface $language_manager,
-        ConfigFactoryInterface $config_factory
+        ConfigFactoryInterface $config_factory,
+        EntityRepositoryInterface $entity_repository
     ) {
         $this->entityManager = $entityManager;
         $this->entityTypeManager = $entityTypeManager;
@@ -78,6 +87,7 @@ class WmSettings
         $this->languageManager = $language_manager;
         $this->config = $config_factory->get('wmsettings.settings');
         $this->config_editable = $config_factory->getEditable('wmsettings.settings');
+        $this->entityRepository = $entity_repository;
     }
 
     public function getEntityType()
@@ -209,10 +219,14 @@ class WmSettings
 
         $ids = $query->execute();
 
-        // Return them loaded.
+        // Load them, and get them in the correct (=current) language.
         $entities = $this->entityTypeManager
             ->getStorage($this->getEntityType())
             ->loadMultiple($ids);
+
+        foreach ((array)$entities as $k => $v) {
+            $entities[$k] = $this->entityRepository->getTranslationFromContext($v);
+        }
 
         if ($key != null) {
             return reset($entities);
