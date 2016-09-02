@@ -1,0 +1,8 @@
+wmsettings.settings_add:
+  route_name: wmsettings.settings.add
+  title: 'Add setting'
+  appears_on:
+    - wmsettings.settings
+  options:
+      query:
+        destination: '/admin/config/wmsettings'

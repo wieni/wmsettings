@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Defines the Wieni Settings module.
+ *
+ * @category module
+ *
+ * @package Wieni
+ */
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+
+/**
+ * Get the entity for a key.
+ */
+function wmsettings_get($key)
+{
+    return Drupal::service('wmsettings.settings')
+        ->read($key);
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ *
+ * More intel at https://www.drupal.org/node/1879542
+ */
+function wmsettings_entity_base_field_info(EntityTypeInterface $entity_type)
+{
+    $fields = [];
+
+    // Attach a machine name field to our bundle.
+    if ($entity_type->id() == 'settings') {
+        $fields['wmsettings_key'] = BaseFieldDefinition::create('string')
+            ->setLabel(t('Key'))
+            ->setDescription(t('The key machine name of this config'))
+            ->setRequired(true)
+            ->setReadOnly(true)
+            ->setDisplayConfigurable('view', false)
+            ->setDisplayConfigurable('form', true)
+            ->setDisplayOptions('form', array(
+                'type' => 'hidden',
+                'weight' => 20,
+            ));
+    }
+
+    return $fields;
+}

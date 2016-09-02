@@ -1,0 +1,32 @@
+wmsettings.content:
+  path: '/admin/content/wmsettings'
+  defaults:
+    _controller: '\Drupal\wmsettings\Controller\SettingsOverview::overviewContent'
+    _title: 'WmSettings'
+  requirements:
+    _permission: 'administer wmsettings content'
+
+wmsettings.settings:
+  path: '/admin/config/wmsettings'
+  defaults:
+    _controller: '\Drupal\wmsettings\Controller\SettingsOverview::overviewConfig'
+    _title: 'WmSettings'
+  requirements:
+    _permission: 'administer site configuration'
+
+wmsettings.settings.add:
+  path: '/admin/config/wmsettings/add/{key}'
+  defaults:
+    _form: '\Drupal\wmsettings\Form\AddForm'
+    _title: 'Add wmsetting setting'
+    key: null
+  requirements:
+    _permission: 'administer site configuration'
+
+wmsettings.settings.delete:
+  path: '/admin/config/wmsettings/delete/{key}'
+  defaults:
+    _form: '\Drupal\wmsettings\Form\DeleteForm'
+    _title: 'Delete wmsetting setting'
+  requirements:
+    _permission: 'administer site configuration'

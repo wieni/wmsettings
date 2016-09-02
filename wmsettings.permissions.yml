@@ -1,0 +1,4 @@
+administer wmsettings content:
+  title: 'Administer wmsettings content'
+  description: 'Be able to change the effective content'
+  restrict access: true
