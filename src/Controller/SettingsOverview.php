@@ -160,13 +160,14 @@ class SettingsOverview extends ControllerBase
                 ]
             ];
 
-            $rows[] = [
-                $keys[$value->wmsettings_key->value]['label'],
-                $keys[$value->wmsettings_key->value]['desc'],
-                $operations,
-            ];
+            if (isset($keys[$value->wmsettings_key->value])) {
+                $rows[] = [
+                    $keys[$value->wmsettings_key->value]['label'],
+                    $keys[$value->wmsettings_key->value]['desc'],
+                    $operations,
+                ];
+            }
         }
-
 
         $build = [
             '#theme' => 'table',
