@@ -4,6 +4,7 @@ namespace Drupal\wmsettings\EventSubscriber;
 
 use Drupal\Core\Config\ConfigEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Drupal\Core\Config\ConfigImporterEvent;
 
 use Drupal\wmsettings\Service\WmSettings;
 
@@ -49,6 +50,6 @@ class ConfigSubscriber implements EventSubscriberInterface
      */
     public function onConfigImporterImport(ConfigImporterEvent $event)
     {
-        $this->checkAndCreateEntities();
+        $this->wmSettings->checkAndCreateEntities();
     }
 }

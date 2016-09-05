@@ -2,3 +2,8 @@ services:
   wmsettings.settings:
     class: Drupal\wmsettings\Service\WmSettings
     arguments: ['@entity.manager', '@entity_type.manager', '@entity.query', '@language_manager', '@config.factory', '@entity.repository']
+  wmsettings.config_subscriber:
+    class: Drupal\wmsettings\EventSubscriber\ConfigSubscriber
+    arguments: ['@wmsettings.settings']
+    tags:
+      - { name: event_subscriber }

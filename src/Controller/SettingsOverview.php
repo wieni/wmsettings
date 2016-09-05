@@ -117,6 +117,8 @@ class SettingsOverview extends ControllerBase
     {
         $keys = $this->wmSettings->readKeys();
 
+        $rows = [];
+
         // Get all content.
         foreach ((array)$this->wmSettings->read() as $key => $value) {
             // Link directly to the eck edit form.
@@ -172,6 +174,7 @@ class SettingsOverview extends ControllerBase
         $build = [
             '#theme' => 'table',
             '#rows' => $rows,
+            '#empty' => $this->t('No settings found'),
             '#header' => [
                 $this->t('Label'),
                 $this->t('Description'),
