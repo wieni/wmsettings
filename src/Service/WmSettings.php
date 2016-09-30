@@ -233,4 +233,34 @@ class WmSettings
         }
         return $entities;
     }
+    
+    /**
+     * Shortcut to get data out of ordinary fields.
+     */
+    public function fill($entity, $fields)
+    {
+        $return = [];
+        
+        foreach ((array)$fields as $field_name => $type) {
+            if ($entity->get($field_name) && $entity->get($field_name)->first()) {
+                switch ($type) {
+                    case 'textarea':
+                        $value = $entity->get($field_name)->first()->getValue();
+                        // TODO: Dep inject renderer here.
+                        $return[$field_name] = check_markup(
+                            $value['value'],
+                            $value['format']
+                        );
+                        break;
+                    
+                    default:
+                        $return[$field_name] = 'Unkown handler' . $type . ' in WmSettings.php, line 254';
+                        break;
+                }
+            }
+        }
+        
+        return $return;
+    }
+    
 }
