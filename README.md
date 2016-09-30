@@ -31,3 +31,16 @@ There are several ways to access the entity for a key.
 #### 2. The module function.
 
     wmsettings_get('my_key');
+
+
+#### 3. The fill function.
+
+Returns a quick flattened array of all values in a setting, given field names and field types. Not a lot of field types are supported now.
+
+    $variables['copy'] = Drupal::service('wmsettings.settings')
+            ->fill(
+                $global_copy,
+                [
+                    'field_name' => 'textarea',
+                ]
+            );
