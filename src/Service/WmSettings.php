@@ -242,7 +242,7 @@ class WmSettings
         $return = [];
         
         foreach ((array)$fields as $field_name => $type) {
-            if ($entity->get($field_name) && $entity->get($field_name)->first()) {
+            if ($entity->get($field_name) && !$entity->get($field_name)->isEmpty()) {
                 switch ($type) {
                     case 'textarea':
                         $value = $entity->get($field_name)->first()->getValue();
@@ -253,10 +253,16 @@ class WmSettings
                         );
                         break;
                     
+                    case 'textfield':
+                        $return[$field_name] = $entity->get($field_name)->getString();
+                        break;
+                    
                     default:
-                        $return[$field_name] = 'Unkown handler' . $type . ' in WmSettings.php, line 254';
+                        $return[$field_name] = 'Unkown handler ' . $type . ' in WmSettings.php, line 254';
                         break;
                 }
+            } else {
+                $return[$field_name] = '';
             }
         }
         
