@@ -121,46 +121,52 @@ class SettingsOverview extends ControllerBase
 
         // Get all content.
         foreach ((array)$this->wmSettings->read() as $key => $value) {
-            // Link directly to the eck edit form.
             $operations = [
                 'data' => [
                     '#type' => 'operations',
-                    '#links' => [
-                        'edit' => [
-                            'url' => Url::fromRoute(
-                                'entity.' . $this->wmSettings->getEntityType() . '.edit_form',
-                                [
-                                    'settings' => $value->id(),
-                                ],
-                                [
-                                    'query' => [
-                                        'destination' => Url::fromRoute(
-                                            "wmsettings.content"
-                                        )->toString(),
-                                    ]
-                                ]
-                            ),
-                            'title' => $this->t('Edit'),
-                        ],
-                        'translate' => [
-                            'url' => Url::fromRoute(
-                                'entity.' . $this->wmSettings->getEntityType() . '.content_translation_overview',
-                                [
-                                    'settings' => $value->id(),
-                                ],
-                                [
-                                    'query' => [
-                                        'destination' => Url::fromRoute(
-                                            "wmsettings.content"
-                                        )->toString(),
-                                    ]
-                                ]
-                            ),
-                            'title' => $this->t('Translate'),
-                        ],
-                    ]
+                    '#links' => [],
                 ]
             ];
+            
+            $editOperation = [
+                'url' => Url::fromRoute(
+                    'entity.' . $this->wmSettings->getEntityType() . '.edit_form',
+                    [
+                        'settings' => $value->id(),
+                    ],
+                    [
+                        'query' => [
+                            'destination' => Url::fromRoute(
+                                "wmsettings.content"
+                            )->toString(),
+                        ]
+                    ]
+                ),
+                'title' => $this->t('Edit'),
+            ];
+            $operations['data']['#links']['edit'] = $editOperation;
+            
+            if (\Drupal::moduleHandler()->moduleExists('content_translation'))
+            {
+                $translateOperation = [
+                    'url' => Url::fromRoute(
+                        'entity.' . $this->wmSettings->getEntityType() . '.content_translation_overview',
+                        [
+                            'settings' => $value->id(),
+                        ],
+                        [
+                            'query' => [
+                                'destination' => Url::fromRoute(
+                                    "wmsettings.content"
+                                )->toString(),
+                            ]
+                        ]
+                    ),
+                    'title' => $this->t('Translate'),
+                ];
+                $operations['data']['#links']['translate'] = $translateOperation;
+            }
+
 
             if (isset($keys[$value->wmsettings_key->value])) {
                 $rows[] = [
