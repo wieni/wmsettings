@@ -11,6 +11,7 @@
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Get the entity for a key.
@@ -47,3 +48,45 @@ function wmsettings_entity_base_field_info(EntityTypeInterface $entity_type)
 
     return $fields;
 }
+
+
+/**
+ * Disable the form action if they do not have the permission.
+ *
+ * @param $form
+ * @param $form_state
+ * @param $form_id
+ */
+function wmsettings_form_alter(&$form, $form_state, $form_id)
+{
+    if (strpos($form_id, "settings_") === 0) {
+        // check the permission for delete.
+        /** @var \Drupal\user\Entity\User $user */
+        $user = \Drupal::currentUser();
+        if (!$user->hasPermission('delete wmsettings group')) {
+            unset($form['actions']['delete']);
+        }
+    }
+}
+
+
+/**
+ * Prevent delete on settings if you don't have the proper rights.
+ *
+ * @param \Drupal\Core\Entity\EntityStorageInterface $entity
+ * @param string $operation
+ * @param \Drupal\Core\Session\AccountInterface $user
+ * @return AccessResult
+ */
+function wmsettings_entity_access($entity, $operation, $user)
+{
+    if ($entity->getEntityTypeId() == "settings" && $operation == "delete") {
+        if (!$user->hasPermission('delete wmsettings group')) {
+            return AccessResult::forbidden();
+        }
+    }
+
+    return AccessResult::neutral();
+}
+
+

@@ -2,3 +2,7 @@ administer wmsettings content:
   title: 'Administer wmsettings content'
   description: 'Be able to change the effective content'
   restrict access: true
+delete wmsettings group:
+  title: 'Delete a wmsettings group'
+  description: 'Ideally the client should not be able to delete the grouping.'
+  restrict access: true
