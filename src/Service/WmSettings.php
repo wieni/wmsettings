@@ -256,6 +256,15 @@ class WmSettings
                     case 'textfield':
                         $return[$field_name] = $entity->get($field_name)->getString();
                         break;
+
+                    case 'link':
+                        /** @var LinkItem $linkItem */
+                        $linkItem = $entity->get($field_name)->get(0);
+                        $return[$field_name] = [
+                            'url' => $linkItem->getUrl()->toString(),
+                            'title' => $linkItem->title,
+                        ];
+                        break;   
                     
                     default:
                         $return[$field_name] = 'Unkown handler ' . $type . ' in WmSettings.php, line 254';
