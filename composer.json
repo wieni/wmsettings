@@ -8,7 +8,16 @@
             "email": "info@wieni.be"
         }
     ],
-    "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packagist.drupal-composer.org"
+        }
+    ],
+    "minimum-stability": "alpha",
     "prefer-stable": true,
-    "type": "drupal-module"
+    "type": "drupal-module",
+    "require": {
+        "drupal/eck": "^8.1"
+    }
 }
