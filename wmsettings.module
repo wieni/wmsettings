@@ -78,15 +78,13 @@ function wmsettings_form_alter(&$form, $form_state, $form_id)
  * @param \Drupal\Core\Session\AccountInterface $user
  * @return AccessResult
  */
-function wmsettings_entity_access($entity, $operation, $user)
+function wmsettings_settings_access($entity, $operation, $user)
 {
-    if ($entity->getEntityTypeId() == "settings" && $operation == "delete") {
-        if (!$user->hasPermission('delete wmsettings group')) {
-            return AccessResult::forbidden();
-        }
+    // Forbid.
+    if ($operation == "delete") {
+        return AccessResult::allowedIfHasPermission($user, 'delete wmsettings group');
     }
 
+    // Other wise...
     return AccessResult::neutral();
 }
-
-
