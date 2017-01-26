@@ -66,6 +66,17 @@ function wmsettings_form_alter(&$form, $form_state, $form_id)
         if (!$user->hasPermission('delete wmsettings group')) {
             unset($form['actions']['delete']);
         }
+        
+        // Since the entity is NOT in the form we load it via the route.
+        /** @var \Drupal\eck\Entity\EckEntity $entity */
+        if ($entity = \Drupal::routeMatch()->getParameter('settings')) {
+            $form['#title'] = t(
+                'Edit setting %settingName',
+                ['%settingName' => $entity->type->entity->label()]
+            );
+        }
+    
+       
     }
 }
 
