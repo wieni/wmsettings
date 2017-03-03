@@ -3,9 +3,9 @@
 namespace Drupal\wmsettings\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\eck\Entity\EckEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
-
 use Drupal\wmsettings\Service\WmSettings;
 
 /**
@@ -13,16 +13,11 @@ use Drupal\wmsettings\Service\WmSettings;
  */
 class SettingsOverview extends ControllerBase
 {
-    /**
-     * The settings.
-     *
-     * @var \Drupal\wmsettings\WmSettings
-     */
+    /** @var WmSettings */
     protected $wmSettings;
 
     /**
-     * @param \Drupal\wmsettings\WmSettings $wm_settings
-     *   A wmcontent manager instance.
+     * @param WmSettings $wm_settings
      */
     public function __construct(WmSettings $wm_settings)
     {
@@ -189,5 +184,44 @@ class SettingsOverview extends ControllerBase
         ];
 
         return $build;
+    }
+
+    /**
+     * Redirect to the correct setting (and tab).
+     *
+     * @param $key
+     * @param $anchor
+     * @param $destination
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function redirectSetting($key, $destination, $anchor)
+    {
+        $setting = $this->wmSettings->readKey($key);
+
+        // Redirect raw when we can't find the key.
+        if (!$setting) {
+            drupal_set_message(
+                t('Unknown wmSettings key: %key', ['%key' => $key]),
+                'error'
+            );
+
+            return $this->redirect($destination);
+        }
+
+        /** @var EckEntity $settingData */
+        $settingData = $this->wmSettings->read($key);
+
+        return $this->redirect(
+            'entity.settings.edit_form',
+            [
+                'settings' => $settingData->id()
+            ],
+            [
+                'fragment' => $anchor,
+                'query' => [
+                    'destination' => Url::fromRoute($destination)->toString()
+                ]
+            ]
+        );
     }
 }
