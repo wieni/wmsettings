@@ -30,3 +30,13 @@ wmsettings.settings.delete:
     _title: 'Delete wmsetting setting'
   requirements:
     _permission: 'administer site configuration'
+
+wmsettings.settings.redirect:
+  path: '/admin/content/wmsettings/redirect/{key}/{destination}/{anchor}'
+  defaults:
+    _controller: '\Drupal\wmsettings\Controller\SettingsOverview::redirectSetting'
+    _title: 'WmSettings'
+    destination: null
+    anchor: null
+  requirements:
+    _permission: 'administer wmsettings content'

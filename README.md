@@ -44,3 +44,26 @@ Returns a quick flattened array of all values in a setting, given field names an
                     'field_name' => 'textarea',
                 ]
             );
+
+
+#### 4. Adding Tabs (local tasks) to Settings for your custom routes
+
+Drupal requires at least two tasks to show them, so for the sake of completeness this example loads two tasks too:
+
+
+```yml
+wmcustom.home_controller_home.home:
+  title: 'View'
+  route_name: wmcustom.home_controller_home
+  base_route: wmcustom.home_controller_home
+  
+wmcustom.home_controller_home.edit:
+  title: 'Edit'
+  route_name: wmsettings.settings.redirect
+  route_parameters:
+    key:  'homepage'
+    anchor: 'edit-group-hero-image'
+    destination: 'wmcustom.home_controller_home'
+  base_route: wmcustom.home_controller_home
+
+```

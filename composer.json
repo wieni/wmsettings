@@ -16,8 +16,5 @@
     ],
     "minimum-stability": "alpha",
     "prefer-stable": true,
-    "type": "drupal-module",
-    "require": {
-        "drupal/eck": "^8.1"
-    }
+    "type": "drupal-module"
 }
