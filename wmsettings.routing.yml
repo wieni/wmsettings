@@ -2,7 +2,7 @@ wmsettings.content:
   path: '/admin/content/wmsettings'
   defaults:
     _controller: '\Drupal\wmsettings\Controller\SettingsOverview::overviewContent'
-    _title: 'WmSettings'
+    _title: 'Settings'
   requirements:
     _permission: 'administer wmsettings content'
 
@@ -10,7 +10,7 @@ wmsettings.settings:
   path: '/admin/config/wmsettings'
   defaults:
     _controller: '\Drupal\wmsettings\Controller\SettingsOverview::overviewConfig'
-    _title: 'WmSettings'
+    _title: 'Settings'
   requirements:
     _permission: 'administer site configuration'
 
@@ -35,7 +35,7 @@ wmsettings.settings.redirect:
   path: '/admin/content/wmsettings/redirect/{key}/{destination}/{anchor}'
   defaults:
     _controller: '\Drupal\wmsettings\Controller\SettingsOverview::redirectSetting'
-    _title: 'WmSettings'
+    _title: 'Settings'
     destination: null
     anchor: null
   requirements:
