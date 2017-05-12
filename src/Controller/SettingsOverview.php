@@ -174,7 +174,6 @@ class SettingsOverview extends ControllerBase
 
         $build = [
             '#theme' => 'table',
-            '#title' => $this->t('Settings'),
             '#rows' => $rows,
             '#empty' => $this->t('No settings found'),
             '#header' => [
