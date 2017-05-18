@@ -80,6 +80,18 @@ function wmsettings_form_alter(&$form, $form_state, $form_id)
     }
 }
 
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function wmsettings_menu_local_tasks_alter(&$data, $route_name)
+{
+    /** @var \Drupal\user\Entity\User $user */
+    $user = \Drupal::currentUser();
+
+    if ($route_name === 'entity.settings.edit_form' && !$user->hasPermission('delete wmsettings group')) {
+        unset($data['tabs'][0]['eck.entity_content:settings.eck_delete_tab']);
+    }
+}
 
 /**
  * Prevent delete on settings if you don't have the proper rights.
