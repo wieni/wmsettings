@@ -8,10 +8,3 @@ services:
     arguments: ['@wmsettings.settings']
     tags:
       - { name: event_subscriber }
-
-  wmsettings.twig.wmsettings:
-    class: Drupal\wmsettings\Twig\WmSettingsTwig
-    arguments:
-      - @wmsettings.settings
-    tags:
-      - { name: twig.extension }
