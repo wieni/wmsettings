@@ -2,6 +2,7 @@
 
 namespace Drupal\wmsettings\Service;
 
+use Drupal\Core\Entity\ContentEntityInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -178,26 +179,44 @@ class WmSettings
      */
     public function checkAndCreateEntities()
     {
-        foreach ((array)$this->readKeys() as $value) {
+        $storage = $this
+            ->entityTypeManager
+            ->getStorage($this->getEntityType());
+
+        foreach ((array) $this->readKeys() as $value) {
             // Create an entity query for our entity type.
-            $query = $this
-                ->entityQuery
-                ->get($this->getEntityType())
+            $query = $storage
+                ->getQuery()
                 ->condition('wmsettings_key', $value['key'])
                 ->condition('type', $value['bundle']);
 
             // Return the entities.
-            $result = $query->execute();
+            $entities = $query->execute();
 
-            if (empty($result)) {
-                $entity = $this
-                    ->entityTypeManager
-                    ->getStorage($this->getEntityType())
-                    ->create([
-                        'type' => $value['bundle'],
-                        'wmsettings_key' => $value['key']
-                    ])
-                    ->save();
+            if (empty($entities)) {
+                $entity = $storage->create([
+                    'type' => $value['bundle'],
+                    'wmsettings_key' => $value['key']
+                ]);
+
+                $entity->save();
+                $entities[] = $entity;
+            } else {
+                $entities = $storage->loadMultiple($entities);
+            }
+
+            // Make sure translations, if available, are always published
+            /** @var ContentEntityInterface $entity */
+            foreach ($entities as $entity) {
+                if (!$entity->hasField('content_translation_status')) {
+                    continue;
+                }
+
+                foreach ($entity->getTranslationLanguages() as $language) {
+                    $entity->getTranslation($language->getId())
+                        ->set('content_translation_status', 1)
+                        ->save();
+                }
             }
         }
     }
