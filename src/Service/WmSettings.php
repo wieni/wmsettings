@@ -2,93 +2,44 @@
 
 namespace Drupal\wmsettings\Service;
 
+use Drupal\Core\Config\Config;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Drupal\Core\Entity\EntityManagerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
-use Drupal\Core\Entity\Query\QueryFactory;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\link\Plugin\Field\FieldType\LinkItem;
 
-/**
- * Provides common functionality for content translation.
- */
 class WmSettings
 {
-
-    /**
-     * The entity manager.
-     *
-     * @var \Drupal\Core\Entity\EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * The entity type manager.
-     *
-     * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-     */
+    /** @var EntityTypeBundleInfoInterface */
+    protected $entityTypeBundleInfo;
+    /** @var EntityTypeManagerInterface */
     protected $entityTypeManager;
-
-    /**
-     * The query interface.
-     */
-    protected $entityQuery;
-
-    /**
-     * The language manager.
-     */
-    protected $languageManager;
-
-    /**
-     * The config.
-     *
-     * @var \Drupal\Core\Config\ImmutableConfig
-     */
-    protected $config;
-
-    /**
-     * The config, editable.
-     *
-     * @var \Drupal\Core\Config\ImmutableConfig
-     */
-    protected $config_editable;
-
-    /**
-     * The entity repository.
-     *
-     * @var \Drupal\Core\Entity\EntityRepositoryInterface
-     */
+    /** @var EntityRepositoryInterface */
     protected $entityRepository;
+    /** @var LanguageManagerInterface */
+    protected $languageManager;
+    /** @var ImmutableConfig */
+    protected $config;
+    /** @var Config */
+    protected $configEditable;
 
-    /**
-     * Constructs a WmContentManageAccessCheck object.
-     *
-     * @param \Drupal\Core\Entity\EntityManagerInterface $manager
-     *   The entity type manager.
-     * @param \Drupal\Core\Entity\QueryFactory $query
-     *   The query factory.
-     * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-     *   The language manager.
-     * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-     *   The factory for configuration objects.
-     */
     public function __construct(
-        EntityManagerInterface $entityManager,
+        EntityTypeBundleInfoInterface $entityTypeBundleInfo,
         EntityTypeManagerInterface $entityTypeManager,
-        QueryFactory $query,
-        LanguageManagerInterface $language_manager,
-        ConfigFactoryInterface $config_factory,
-        EntityRepositoryInterface $entity_repository
+        EntityRepositoryInterface $entityRepository,
+        LanguageManagerInterface $languageManager,
+        ConfigFactoryInterface $configFactory
     ) {
-        $this->entityManager = $entityManager;
+        $this->entityTypeBundleInfo = $entityTypeBundleInfo;
         $this->entityTypeManager = $entityTypeManager;
-        $this->entityQuery = $query;
-        $this->languageManager = $language_manager;
-        $this->config = $config_factory->get('wmsettings.settings');
-        $this->config_editable = $config_factory->getEditable('wmsettings.settings');
-        $this->entityRepository = $entity_repository;
+        $this->entityRepository = $entityRepository;
+        $this->languageManager = $languageManager;
+        $this->config = $configFactory->get('wmsettings.settings');
+        $this->configEditable = $configFactory->getEditable('wmsettings.settings');
     }
 
     public function getEntityType()
@@ -101,7 +52,7 @@ class WmSettings
      */
     public function getAllBundles()
     {
-        return $this->entityManager->getBundleInfo($this->getEntityType());
+        return $this->entityTypeBundleInfo->getBundleInfo($this->getEntityType());
     }
 
     /**
@@ -118,7 +69,7 @@ class WmSettings
     public function updateKeys($keys)
     {
         // Check our instances every time we do this.
-        $this->config_editable->set('keys', $keys)->save();
+        $this->configEditable->set('keys', $keys)->save();
         $this->checkAndCreateEntities();
     }
 
@@ -226,10 +177,10 @@ class WmSettings
      */
     public function read($key = null)
     {
-        // Create an entity query for our entity type.
         $query = $this
-            ->entityQuery
-            ->get($this->getEntityType());
+            ->entityTypeManager
+            ->getStorage($this->getEntityType())
+            ->getQuery();
 
         if ($key != null) {
             $query = $query
@@ -243,24 +194,25 @@ class WmSettings
             ->getStorage($this->getEntityType())
             ->loadMultiple($ids);
 
-        foreach ((array)$entities as $k => $v) {
+        foreach ($entities as $k => $v) {
             $entities[$k] = $this->entityRepository->getTranslationFromContext($v);
         }
 
         if ($key != null) {
             return reset($entities);
         }
+
         return $entities;
     }
-    
+
     /**
      * Shortcut to get data out of ordinary fields.
      */
     public function fill($entity, $fields)
     {
         $return = [];
-        
-        foreach ((array)$fields as $field_name => $type) {
+
+        foreach ((array) $fields as $field_name => $type) {
             if ($entity->get($field_name) && !$entity->get($field_name)->isEmpty()) {
                 switch ($type) {
                     case 'textarea':
@@ -271,7 +223,7 @@ class WmSettings
                             $value['format']
                         );
                         break;
-                    
+
                     case 'textfield':
                         $return[$field_name] = $entity->get($field_name)->getString();
                         break;
@@ -283,18 +235,18 @@ class WmSettings
                             'url' => $linkItem->getUrl()->toString(),
                             'title' => $linkItem->title,
                         ];
-                        break;   
-                    
+                        break;
+
                     default:
-                        $return[$field_name] = 'Unkown handler ' . $type . ' in WmSettings.php, line 254';
+                        $return[$field_name] = 'Unknown handler ' . $type . ' in WmSettings.php, line 254';
                         break;
                 }
             } else {
                 $return[$field_name] = '';
             }
         }
-        
+
         return $return;
     }
-    
+
 }
