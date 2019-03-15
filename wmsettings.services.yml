@@ -14,3 +14,10 @@ services:
       - '@wmsettings.settings'
     tags:
       - { name: event_subscriber }
+
+  wmsettings.settings_subscriber:
+    class: Drupal\wmsettings\EventSubscriber\SettingsSubscriber
+    arguments:
+      - '@cache_tags.invalidator'
+    tags:
+      - { name: event_subscriber }
