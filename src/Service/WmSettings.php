@@ -194,8 +194,14 @@ class WmSettings
             ->getStorage($this->getEntityType())
             ->loadMultiple($ids);
 
+        $currentLanguage = $this->languageManager->getCurrentLanguage();
+
         foreach ($entities as $k => $v) {
-            $entities[$k] = $this->entityRepository->getTranslationFromContext($v);
+            if ($v->hasTranslation($currentLanguage->getId())) {
+                $v = $v->getTranslation($currentLanguage->getId());
+            }
+
+            $entities[$k] = $v;
         }
 
         if ($key != null) {
