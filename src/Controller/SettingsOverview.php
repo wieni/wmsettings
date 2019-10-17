@@ -3,6 +3,7 @@
 namespace Drupal\wmsettings\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\eck\Entity\EckEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
@@ -13,14 +14,18 @@ use Drupal\wmsettings\Service\WmSettings;
  */
 class SettingsOverview extends ControllerBase
 {
+    /** @var MessengerInterface */
+    protected $messenger;
     /** @var WmSettings */
     protected $wmSettings;
 
     /**
+     * @param MessengerInterface $messenger
      * @param WmSettings $wm_settings
      */
-    public function __construct(WmSettings $wm_settings)
+    public function __construct(MessengerInterface $messenger, WmSettings $wm_settings)
     {
+        $this->messenger = $messenger;
         $this->wmSettings = $wm_settings;
     }
 
@@ -30,6 +35,7 @@ class SettingsOverview extends ControllerBase
     public static function create(ContainerInterface $container)
     {
         return new static(
+            $container->get('messenger'),
             $container->get('wmsettings.settings')
         );
     }
@@ -200,7 +206,7 @@ class SettingsOverview extends ControllerBase
 
         // Redirect raw when we can't find the key.
         if (!$setting) {
-            drupal_set_message(
+            $this->messenger->addStatus(
                 t('Unknown wmSettings key: %key', ['%key' => $key]),
                 'error'
             );
