@@ -5,6 +5,8 @@
  * Installation file for wmesettings module.
  */
 
+use Drupal\wmsettings\Field\IndexableBaseFieldDefinition;
+
 /**
  * Implements hook_install().
  */
@@ -19,4 +21,25 @@ function wmsettings_install() {
 function wmsettings_uninstall() {
   // Remove our base fields from the schema.
   \Drupal::service('entity.definition_update_manager')->applyUpdates();
+}
+
+/**
+ * Add an index to the wmsettings_key base field
+ */
+function wmsettings_update_8001()
+{
+    $updateManager = \Drupal::entityDefinitionUpdateManager();
+    $entityTypeManager = \Drupal::entityTypeManager();
+
+    if (!$entityType = $entityTypeManager->getDefinition('settings')) {
+        return;
+    }
+
+    if (!$storageDefinition = $updateManager->getFieldStorageDefinition('wmsettings_key', 'settings')) {
+        return;
+    }
+
+    $newDefinition = IndexableBaseFieldDefinition::wrap($storageDefinition)
+        ->addIndex('value');
+    $updateManager->updateFieldStorageDefinition($newDefinition);
 }

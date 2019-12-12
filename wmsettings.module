@@ -12,6 +12,7 @@
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Access\AccessResult;
+use Drupal\wmsettings\Field\IndexableBaseFieldDefinition;
 
 /**
  * Get the entity for a key.
@@ -33,7 +34,7 @@ function wmsettings_entity_base_field_info(EntityTypeInterface $entity_type)
 
     // Attach a machine name field to our bundle.
     if ($entity_type->id() == 'settings') {
-        $fields['wmsettings_key'] = BaseFieldDefinition::create('string')
+        $fields['wmsettings_key'] = IndexableBaseFieldDefinition::create('string')
             ->setLabel(t('Key'))
             ->setDescription(t('The key machine name of this config'))
             ->setRequired(true)
@@ -43,7 +44,8 @@ function wmsettings_entity_base_field_info(EntityTypeInterface $entity_type)
             ->setDisplayOptions('form', array(
                 'type' => 'hidden',
                 'weight' => 20,
-            ));
+            ))
+            ->addIndex('value');
     }
 
     return $fields;
