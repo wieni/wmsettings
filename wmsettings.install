@@ -1,26 +1,21 @@
 <?php
 
-/**
- * @file
- * Installation file for wmesettings module.
- */
-
 use Drupal\wmsettings\Field\IndexableBaseFieldDefinition;
 
-/**
- * Implements hook_install().
- */
-function wmsettings_install() {
-  // Add our base fields to the schema.
-  \Drupal::service('entity.definition_update_manager')->applyUpdates();
-}
+function wmsettings_install()
+{
+    $entityType = \Drupal::entityDefinitionUpdateManager()
+        ->getEntityType('settings');
 
-/**
- * Implements hook_uninstall().
- */
-function wmsettings_uninstall() {
-  // Remove our base fields from the schema.
-  \Drupal::service('entity.definition_update_manager')->applyUpdates();
+    $fields = \Drupal::service('entity.last_installed_schema.repository')
+        ->getLastInstalledFieldStorageDefinitions('settings');
+    $fields += wmsettings_entity_base_field_info($entityType);
+
+    \Drupal::entityDefinitionUpdateManager()
+        ->updateFieldableEntityType($entityType, $fields);
+
+    \Drupal::service('wmsettings.settings')
+        ->checkAndCreateEntities();
 }
 
 /**
