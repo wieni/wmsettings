@@ -48,7 +48,7 @@ class WmSettings
     }
 
     /**
-     * Get all bundles for our eck type.
+     * Get all bundles for our entity type.
      */
     public function getAllBundles()
     {

@@ -117,7 +117,7 @@ class AddForm extends ConfigFormBase
     }
 
     /**
-     * Checks for an existing ECK entity type.
+     * Checks for an existing entity type.
      *
      * @param string $key
      *   The settings ID.

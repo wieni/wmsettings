@@ -1,6 +1,28 @@
 <?php
 
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\wmsettings\Field\IndexableBaseFieldDefinition;
+
+function wmsettings_requirements(string $phase)
+{
+    $requirements = [];
+
+    try {
+        \Drupal::entityDefinitionUpdateManager()
+            ->getEntityType('settings');
+    } catch (PluginNotFoundException $e) {
+        $requirements['settings_entity_type'] = [
+            'title' => t('Settings entity type'),
+            'value' => t('Missing <code>settings</code> entity type'),
+            'description' => t('The wmsettings module needs a <code>settings</code> entity type. You can use the <a href="@eckModuleUrl">eck module</a> or you can create a custom entity type.', [
+                '@eckModuleUrl' => 'https://www.drupal.org/project/eck',
+            ]),
+            'severity' => REQUIREMENT_ERROR,
+        ];
+
+        return $requirements;
+    }
+}
 
 function wmsettings_install()
 {

@@ -4,7 +4,6 @@ namespace Drupal\wmsettings\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\eck\Entity\EckEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
 use Drupal\wmsettings\Service\WmSettings;
@@ -214,7 +213,6 @@ class SettingsOverview extends ControllerBase
             return $this->redirect($destination);
         }
 
-        /** @var EckEntity $settingData */
         $settingData = $this->wmSettings->read($key);
 
         return $this->redirect(

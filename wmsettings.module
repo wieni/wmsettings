@@ -70,7 +70,6 @@ function wmsettings_form_alter(&$form, $form_state, $form_id)
         }
         
         // Since the entity is NOT in the form we load it via the route.
-        /** @var \Drupal\eck\Entity\EckEntity $entity */
         if ($entity = \Drupal::routeMatch()->getParameter('settings')) {
             $form['#title'] = t(
                 'Edit setting %settingName',
@@ -79,19 +78,6 @@ function wmsettings_form_alter(&$form, $form_state, $form_id)
         }
     
        
-    }
-}
-
-/**
- * Implements hook_menu_local_tasks_alter().
- */
-function wmsettings_menu_local_tasks_alter(&$data, $route_name)
-{
-    /** @var \Drupal\user\Entity\User $user */
-    $user = \Drupal::currentUser();
-
-    if ($route_name === 'entity.settings.edit_form' && !$user->hasPermission('delete wmsettings group')) {
-        unset($data['tabs'][0]['eck.entity_content:settings.eck_delete_tab']);
     }
 }
 
