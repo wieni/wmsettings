@@ -6,6 +6,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2020-02-28
+### Added
+- Add changelog
+- Add issue & pull request templates
+- Add coding standard fixers
+- Add Drupal 9 support
+
+### Changed
+- Increase PHP version constraint to 7.1
+- Apply code style related fixes
+- Update .gitignore
+- Update module description
+- Update README & documentation
+
+### Fixed
+- Fix automatic installation of base field
+- Add missing hook_event_dispatcher dependency
+- Add missing license
+
+### Removed
+- Remove unnecessary eck dependency
+
 ## [0.3.3] - 2019-12-12
 ### Added
 - Add index on wmsettings_key base field
