@@ -3,4 +3,5 @@ type: module
 core: 8.x
 package: Wieni
 dependencies:
+  - hook_event_dispatcher
   - options
