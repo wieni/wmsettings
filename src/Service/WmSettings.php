@@ -3,13 +3,13 @@
 namespace Drupal\wmsettings\Service;
 
 use Drupal\Core\Config\Config;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\link\Plugin\Field\FieldType\LinkItem;
 
 class WmSettings
@@ -47,25 +47,19 @@ class WmSettings
         return 'settings';
     }
 
-    /**
-     * Get all bundles for our entity type.
-     */
+    /** Get all bundles for our entity type. */
     public function getAllBundles()
     {
         return $this->entityTypeBundleInfo->getBundleInfo($this->getEntityType());
     }
 
-    /**
-     * Shortcut to the config.
-     */
+    /** Shortcut to the config. */
     public function readKeys()
     {
         return $this->config->get('keys');
     }
 
-    /**
-     * Shortcut to the config.
-     */
+    /** Shortcut to the config. */
     public function updateKeys($keys)
     {
         // Check our instances every time we do this.
@@ -73,9 +67,7 @@ class WmSettings
         $this->checkAndCreateEntities();
     }
 
-    /**
-     * Get the values of a single setting.
-     */
+    /** Get the values of a single setting. */
     public function readKey($key)
     {
         $keys = $this->readKeys();
@@ -87,9 +79,7 @@ class WmSettings
         return false;
     }
 
-    /**
-     * Deletes a key.
-     */
+    /** Deletes a key. */
     public function deleteKey($key)
     {
         $keys = $this->readKeys();
@@ -147,7 +137,7 @@ class WmSettings
             if (empty($entities)) {
                 $entity = $storage->create([
                     'type' => $value['bundle'],
-                    'wmsettings_key' => $value['key']
+                    'wmsettings_key' => $value['key'],
                 ]);
 
                 $entity->save();
@@ -172,9 +162,7 @@ class WmSettings
         }
     }
 
-    /**
-     * Get the all, or get them by key.
-     */
+    /** Get the all, or get them by key. */
     public function read($key = null)
     {
         $query = $this
@@ -211,9 +199,7 @@ class WmSettings
         return $entities;
     }
 
-    /**
-     * Shortcut to get data out of ordinary fields.
-     */
+    /** Shortcut to get data out of ordinary fields. */
     public function fill($entity, $fields)
     {
         $return = [];
@@ -229,11 +215,9 @@ class WmSettings
                             $value['format']
                         );
                         break;
-
                     case 'textfield':
                         $return[$field_name] = $entity->get($field_name)->getString();
                         break;
-
                     case 'link':
                         /** @var LinkItem $linkItem */
                         $linkItem = $entity->get($field_name)->get(0);
@@ -242,7 +226,6 @@ class WmSettings
                             'title' => $linkItem->title,
                         ];
                         break;
-
                     default:
                         $return[$field_name] = 'Unknown handler ' . $type . ' in WmSettings.php, line 254';
                         break;
@@ -254,5 +237,4 @@ class WmSettings
 
         return $return;
     }
-
 }

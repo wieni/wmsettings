@@ -1,23 +1,23 @@
 services:
-  wmsettings.settings:
-    class: Drupal\wmsettings\Service\WmSettings
-    arguments:
-      - '@entity_type.bundle.info'
-      - '@entity_type.manager'
-      - '@entity.repository'
-      - '@language_manager'
-      - '@config.factory'
+    wmsettings.settings:
+        class: Drupal\wmsettings\Service\WmSettings
+        arguments:
+            - '@entity_type.bundle.info'
+            - '@entity_type.manager'
+            - '@entity.repository'
+            - '@language_manager'
+            - '@config.factory'
 
-  wmsettings.config_subscriber:
-    class: Drupal\wmsettings\EventSubscriber\ConfigSubscriber
-    arguments:
-      - '@wmsettings.settings'
-    tags:
-      - { name: event_subscriber }
+    wmsettings.config_subscriber:
+        class: Drupal\wmsettings\EventSubscriber\ConfigSubscriber
+        arguments:
+            - '@wmsettings.settings'
+        tags:
+            - { name: event_subscriber }
 
-  wmsettings.settings_subscriber:
-    class: Drupal\wmsettings\EventSubscriber\SettingsSubscriber
-    arguments:
-      - '@cache_tags.invalidator'
-    tags:
-      - { name: event_subscriber }
+    wmsettings.settings_subscriber:
+        class: Drupal\wmsettings\EventSubscriber\SettingsSubscriber
+        arguments:
+            - '@cache_tags.invalidator'
+        tags:
+            - { name: event_subscriber }

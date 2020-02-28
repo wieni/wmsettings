@@ -1,13 +1,13 @@
 wmsettings.settings:
-  title: 'WmSettings'
-  description: 'Configure wmsettings'
-  route_name: wmsettings.settings
-  parent: system.admin_config
-  weight: 20
+    title: 'WmSettings'
+    description: 'Configure wmsettings'
+    route_name: wmsettings.settings
+    parent: system.admin_config
+    weight: 20
 
 wmsettings.content:
-  title: 'Settings'
-  description: 'Configure site-wide settings'
-  route_name: wmsettings.content
-  parent: system.admin_content
-  weight: 20
+    title: 'Settings'
+    description: 'Configure site-wide settings'
+    route_name: wmsettings.content
+    parent: system.admin_content
+    weight: 20

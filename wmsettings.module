@@ -1,17 +1,7 @@
 <?php
 
-/**
- * @file
- * Defines the Wieni Settings module.
- *
- * @category module
- *
- * @package Wieni
- */
-
-use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\wmsettings\Field\IndexableBaseFieldDefinition;
 
 /**
@@ -41,16 +31,15 @@ function wmsettings_entity_base_field_info(EntityTypeInterface $entity_type)
             ->setReadOnly(true)
             ->setDisplayConfigurable('view', false)
             ->setDisplayConfigurable('form', true)
-            ->setDisplayOptions('form', array(
+            ->setDisplayOptions('form', [
                 'type' => 'hidden',
                 'weight' => 20,
-            ))
+            ])
             ->addIndex('value');
     }
 
     return $fields;
 }
-
 
 /**
  * Disable the form action if they do not have the permission.
@@ -61,14 +50,14 @@ function wmsettings_entity_base_field_info(EntityTypeInterface $entity_type)
  */
 function wmsettings_form_alter(&$form, $form_state, $form_id)
 {
-    if (strpos($form_id, "settings_") === 0) {
+    if (strpos($form_id, 'settings_') === 0) {
         // check the permission for delete.
         /** @var \Drupal\user\Entity\User $user */
         $user = \Drupal::currentUser();
         if (!$user->hasPermission('delete wmsettings group')) {
             unset($form['actions']['delete']);
         }
-        
+
         // Since the entity is NOT in the form we load it via the route.
         if ($entity = \Drupal::routeMatch()->getParameter('settings')) {
             $form['#title'] = t(
@@ -76,8 +65,6 @@ function wmsettings_form_alter(&$form, $form_state, $form_id)
                 ['%settingName' => $entity->type->entity->label()]
             );
         }
-    
-       
     }
 }
 
@@ -92,7 +79,7 @@ function wmsettings_form_alter(&$form, $form_state, $form_id)
 function wmsettings_settings_access($entity, $operation, $user)
 {
     // Forbid.
-    if ($operation == "delete") {
+    if ($operation == 'delete') {
         return AccessResult::allowedIfHasPermission($user, 'delete wmsettings group');
     }
 

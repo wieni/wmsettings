@@ -21,15 +21,12 @@ class SettingsSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return [
-            HookEventDispatcherInterface::ENTITY_INSERT => 'dispatchCacheTags',
-            HookEventDispatcherInterface::ENTITY_UPDATE => 'dispatchCacheTags',
-        ];
+        $events[HookEventDispatcherInterface::ENTITY_INSERT][] = ['dispatchCacheTags'];
+        $events[HookEventDispatcherInterface::ENTITY_UPDATE][] = ['dispatchCacheTags'];
+
+        return $events;
     }
 
-    /**
-     * Invalidate the ads api endpoint when saving the ads settings.
-     */
     public function dispatchCacheTags(BaseEntityEvent $event)
     {
         $entity = $event->getEntity();
@@ -42,7 +39,7 @@ class SettingsSubscriber implements EventSubscriberInterface
         }
 
         $this->tagsInvalidator->invalidateTags([
-            sprintf('wmsettings:%s', $entity->get('wmsettings_key')->value)
+            sprintf('wmsettings:%s', $entity->get('wmsettings_key')->value),
         ]);
     }
 }
