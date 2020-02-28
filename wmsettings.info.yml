@@ -1,5 +1,6 @@
 name: Wieni Settings
 type: module
+description: Provides an Editor UI and Developer API for managing custom settings
 core: 8.x
 package: Wieni
 dependencies:

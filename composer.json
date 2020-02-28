@@ -1,7 +1,7 @@
 {
     "name": "wieni/wmsettings",
     "type": "drupal-module",
-    "description": "Provides an Editor UI and Developers API for setting/getting content",
+    "description": "Provides an Editor UI and Developer API for managing custom settings",
     "license": "MIT",
     "authors": [
         {
