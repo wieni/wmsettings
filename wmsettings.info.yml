@@ -2,7 +2,7 @@ name: Wieni Settings
 type: module
 description: Provides an Editor UI and Developer API for managing custom settings
 core: 8.x
-core_version_requirement: ^8.5 || ^9
+core_version_requirement: ^8 || ^9
 package: Wieni
 dependencies:
   - hook_event_dispatcher
