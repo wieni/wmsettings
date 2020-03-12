@@ -19,9 +19,9 @@ function wmsettings_requirements(string $phase)
             ]),
             'severity' => REQUIREMENT_ERROR,
         ];
-
-        return $requirements;
     }
+
+    return $requirements;
 }
 
 function wmsettings_install()
