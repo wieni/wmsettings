@@ -11,6 +11,7 @@ services:
     wmsettings.config_subscriber:
         class: Drupal\wmsettings\EventSubscriber\ConfigSubscriber
         arguments:
+            - '@entity_type.manager'
             - '@wmsettings.settings'
         tags:
             - { name: event_subscriber }

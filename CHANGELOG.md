@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.3] - 2020-04-30
+### Fixed
+- Make entity type requirement optional during site installation with
+ existing config
+
 ## [0.4.2] - 2020-03-16
 ### Fixed
 - Fix issue with hook_requirements
