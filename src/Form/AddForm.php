@@ -32,7 +32,7 @@ class AddForm extends ConfigFormBase
         $form['label'] = [
             '#type' => 'textfield',
             '#title' => $this->t('Label'),
-            '#default_value' => $setting['label'] ?: '',
+            '#default_value' => $setting['label'] ?? '',
             '#size' => 30,
             '#required' => true,
             '#maxlength' => 64,
@@ -42,7 +42,7 @@ class AddForm extends ConfigFormBase
         $form['key'] = [
             '#title' => $this->t('Key'),
             '#type' => 'machine_name',
-            '#default_value' => $setting['key'] ?: '',
+            '#default_value' => $setting['key'] ?? '',
             '#maxlength' => 64,
             '#description' => $this->t('A unique name for this setting. It must only contain lowercase letters, numbers, and underscores.'),
             '#machine_name' => [
@@ -61,13 +61,13 @@ class AddForm extends ConfigFormBase
                 },
                 $this->wmSettings->getAllBundles()
             ),
-            '#default_value' => $setting['bundle'] ?: '',
+            '#default_value' => $setting['bundle'] ?? '',
         ];
 
         $form['desc'] = [
             '#type' => 'textfield',
             '#title' => $this->t('Description'),
-            '#default_value' => $setting['desc'] ?: '',
+            '#default_value' => $setting['desc'] ?? '',
             '#size' => 128,
             '#required' => true,
             '#maxlength' => 255,

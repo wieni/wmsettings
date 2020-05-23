@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.4] - 2020-05-23
+### Fixed
+- Fix notice 'Trying to access array offset on value of type bool'
+
 ## [0.4.3] - 2020-04-30
 ### Fixed
 - Make entity type requirement optional during site installation with
