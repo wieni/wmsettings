@@ -20,5 +20,3 @@ services:
         class: Drupal\wmsettings\EventSubscriber\SettingsSubscriber
         arguments:
             - '@cache_tags.invalidator'
-        tags:
-            - { name: event_subscriber }

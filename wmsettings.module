@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\wmsettings\Field\IndexableBaseFieldDefinition;
 
@@ -39,6 +40,20 @@ function wmsettings_entity_base_field_info(EntityTypeInterface $entity_type)
     }
 
     return $fields;
+}
+
+function wmsettings_entity_insert(EntityInterface $entity)
+{
+    \Drupal::getContainer()
+        ->get('wmsettings.settings_subscriber')
+        ->dispatchCacheTags($entity);
+}
+
+function wmsettings_entity_update(EntityInterface $entity)
+{
+    \Drupal::getContainer()
+        ->get('wmsettings.settings_subscriber')
+        ->dispatchCacheTags($entity);
 }
 
 /**

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2020-07-23
+### Removed
+- Remove hook_event_dispatcher dependency
+
 ## [0.4.4] - 2020-05-23
 ### Fixed
 - Fix notice 'Trying to access array offset on value of type bool'

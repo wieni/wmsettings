@@ -11,8 +11,7 @@
     ],
     "require": {
         "php": ">=7.1",
-        "drupal/core": "^8.5 || ^9",
-        "drupal/hook_event_dispatcher": "^1.27"
+        "drupal/core": "^8.5 || ^9"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.0",
