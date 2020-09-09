@@ -20,3 +20,10 @@ services:
         class: Drupal\wmsettings\EventSubscriber\SettingsSubscriber
         arguments:
             - '@cache_tags.invalidator'
+
+    wmsettings.twig_extension:
+        class: Drupal\wmsettings\Twig\Extension\SettingExtension
+        tags: ['twig.extension']
+        arguments:
+            - '@renderer'
+            - '@wmsettings.settings'
