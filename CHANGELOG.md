@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.6.0] - 2020-07-23
+## [0.6.1] - 2020-09-21
+### Added
+- Fix Twig extension service definition
+
+## [0.6.0] - 2020-09-09
 ### Added
 - Add Twig extension
 

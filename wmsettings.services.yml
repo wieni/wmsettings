@@ -23,7 +23,7 @@ services:
 
     wmsettings.twig_extension:
         class: Drupal\wmsettings\Twig\Extension\SettingExtension
-        tags: ['twig.extension']
+        tags: [ { name: twig.extension } ]
         arguments:
             - '@renderer'
             - '@wmsettings.settings'
