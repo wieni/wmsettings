@@ -11,3 +11,7 @@ wmsettings.content:
     route_name: wmsettings.content
     parent: system.admin_content
     weight: 20
+
+wmsettings.content.settings:
+    parent: wmsettings.content
+    deriver: Drupal\wmsettings\Plugin\Derivative\SettingsMenuItemsDeriver
