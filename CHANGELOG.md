@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.1] - 2020-12-11
+### Added
+- Add static cache to Twig extension to prevent unnecessary database calls when calling the function multiple times with the same arguments
+
 ## [0.7.0] - 2020-09-21
 ### Added
 - Add individual settings as menu items under the _Content_ > _Settings_ menu item

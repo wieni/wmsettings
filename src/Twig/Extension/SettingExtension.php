@@ -16,6 +16,9 @@ class SettingExtension extends AbstractExtension
     /** @var WmSettings */
     protected $wmSettings;
 
+    /** @var array */
+    protected $cache;
+
     public function __construct(
         RendererInterface $renderer,
         WmSettings $wmSettings
@@ -33,7 +36,15 @@ class SettingExtension extends AbstractExtension
 
     public function getSetting($bundle)
     {
-        $entity = $this->wmSettings->read($bundle);
+        if (!is_string($bundle)) {
+            return null;
+        }
+
+        if (!isset($this->cache[$bundle])) {
+            $this->cache[$bundle] = $this->wmSettings->read($bundle);
+        }
+
+        $entity = $this->cache[$bundle];
 
         // Workaround to include caching metadata of the settings entity
         if ($entity instanceof EntityInterface) {
