@@ -25,7 +25,7 @@ class SettingsMenuItemsDeriver extends DeriverBase implements ContainerDeriverIn
 
     public function getDerivativeDefinitions($base_plugin_definition)
     {
-        foreach ($this->settings->readKeys() as $key => $config) {
+        foreach ($this->settings->readKeys() ?? [] as $key => $config) {
             if (!$entity = $this->settings->read($key)) {
                 continue;
             }
