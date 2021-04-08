@@ -33,8 +33,8 @@ function wmsettings_entity_base_field_info(EntityTypeInterface $entity_type)
             ->setDisplayConfigurable('view', false)
             ->setDisplayConfigurable('form', true)
             ->setDisplayOptions('form', [
-                'type' => 'hidden',
-                'weight' => 20,
+                'type' => 'string_textfield',
+                'region' => 'hidden',
             ])
             ->addIndex('value');
     }
