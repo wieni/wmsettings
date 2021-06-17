@@ -5,6 +5,7 @@ namespace Drupal\wmsettings\Plugin\Derivative;
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\wmsettings\Service\WmSettings;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -31,11 +32,14 @@ class SettingsMenuItemsDeriver extends DeriverBase implements ContainerDeriverIn
             }
 
             $editUrl = $entity->toUrl('edit-form');
+            $overviewUrl = Url::fromRoute('wmsettings.content');
 
             $this->derivatives[sprintf('wmsettings.%s', $entity->bundle())] = [
                 'title' => $config['label'],
                 'route_name' => $editUrl->getRouteName(),
-                'route_parameters' => $editUrl->getRouteParameters(),
+                'route_parameters' => $editUrl->getRouteParameters() + [
+                    'destination' => $overviewUrl->toString(),
+                ],
             ] + $base_plugin_definition;
         }
 
