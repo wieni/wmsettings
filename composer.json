@@ -10,12 +10,12 @@
         }
     ],
     "require": {
-        "php": "^8.0",
-        "drupal/core": "^9.1"
+        "php": ">=7.1",
+        "drupal/core": "^8.5 || ^9"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.0",
-        "wieni/wmcodestyle": "^1.7"
+        "wieni/wmcodestyle": "^1.0"
     },
     "repositories": [
         {
