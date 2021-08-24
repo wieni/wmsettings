@@ -168,7 +168,8 @@ class WmSettings
         $query = $this
             ->entityTypeManager
             ->getStorage($this->getEntityType())
-            ->getQuery();
+            ->getQuery()
+            ->accessCheck(true);
 
         if ($key != null) {
             $query = $query
