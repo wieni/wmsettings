@@ -26,6 +26,8 @@ class WmSettings
     protected $config;
     /** @var Config */
     protected $configEditable;
+    /** @var array */
+    protected $cache = []; // todo: replace with MemoryCacheInterface
 
     public function __construct(
         EntityTypeBundleInfoInterface $entityTypeBundleInfo,
@@ -162,9 +164,21 @@ class WmSettings
         }
     }
 
-    /** Get the all, or get them by key. */
+    /**
+     * Get the all, or get them by key.
+     * @return ContentEntityInterface[]|ContentEntityInterface|false
+     */
     public function read($key = null)
     {
+        $currentLanguage = $this->languageManager->getCurrentLanguage();
+        $cid = sprintf(
+            '%s:%s',
+            isset($key) ? $key : 'all',
+            $currentLanguage->getId()
+        );
+        if (isset($this->cache[$cid])) {
+            return $this->cache[$cid];
+        }
         $query = $this
             ->entityTypeManager
             ->getStorage($this->getEntityType())
@@ -182,8 +196,6 @@ class WmSettings
             ->getStorage($this->getEntityType())
             ->loadMultiple($ids);
 
-        $currentLanguage = $this->languageManager->getCurrentLanguage();
-
         foreach ($entities as $k => $v) {
             if ($v->hasTranslation($currentLanguage->getId())) {
                 $v = $v->getTranslation($currentLanguage->getId());
@@ -192,11 +204,12 @@ class WmSettings
             $entities[$k] = $v;
         }
 
+        // When a key is passed we are only interested in that one setting
         if ($key != null) {
-            return reset($entities);
+            $entities = reset($entities);
         }
 
-        return $entities;
+        return $this->cache[$cid] = $entities;
     }
 
     /** Shortcut to get data out of ordinary fields. */
