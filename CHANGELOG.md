@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.7.5] - 2021-08-24
+### Fixed
+- Fix Drupal 9.2 Deprecation message ( https://www.drupal.org/node/3201242 )
+
 ## [0.7.4] - 2021-08-24
 ### Added
 - Add a static cache to the `WmSettings` service
