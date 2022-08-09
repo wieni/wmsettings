@@ -130,6 +130,7 @@ class WmSettings
             // Create an entity query for our entity type.
             $query = $storage
                 ->getQuery()
+                ->accessCheck(false)
                 ->condition('wmsettings_key', $value['key'])
                 ->condition('type', $value['bundle']);
 
