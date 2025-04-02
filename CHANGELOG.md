@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## [0.7.6] - 2025-04-02
+## [0.8.1] - 2025-04-02
 ### Fixed
 - Add check to make sure settings is translatable before adding the translate option. 
 
