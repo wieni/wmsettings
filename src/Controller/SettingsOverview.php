@@ -129,7 +129,10 @@ class SettingsOverview extends ControllerBase
             ];
             $operations['data']['#links']['edit'] = $editOperation;
 
-            if ($this->moduleHandler->moduleExists('content_translation')) {
+            if (
+                $this->moduleHandler->moduleExists('content_translation')
+                && $value->isTranslatable()
+            ) {
                 $translateOperation = [
                     'url' => Url::fromRoute(
                         'entity.' . $this->wmSettings->getEntityType() . '.content_translation_overview',
