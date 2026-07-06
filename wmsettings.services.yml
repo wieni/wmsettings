@@ -7,6 +7,7 @@ services:
             - '@entity.repository'
             - '@language_manager'
             - '@config.factory'
+            - '@renderer'
 
     wmsettings.config_subscriber:
         class: Drupal\wmsettings\EventSubscriber\ConfigSubscriber

@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\link\Plugin\Field\FieldType\LinkItem;
 
 class WmSettings
@@ -22,6 +23,8 @@ class WmSettings
     protected $entityRepository;
     /** @var LanguageManagerInterface */
     protected $languageManager;
+    /** @var RendererInterface */
+    protected $renderer;
     /** @var ImmutableConfig */
     protected $config;
     /** @var Config */
@@ -34,12 +37,14 @@ class WmSettings
         EntityTypeManagerInterface $entityTypeManager,
         EntityRepositoryInterface $entityRepository,
         LanguageManagerInterface $languageManager,
-        ConfigFactoryInterface $configFactory
+        ConfigFactoryInterface $configFactory,
+        RendererInterface $renderer
     ) {
         $this->entityTypeBundleInfo = $entityTypeBundleInfo;
         $this->entityTypeManager = $entityTypeManager;
         $this->entityRepository = $entityRepository;
         $this->languageManager = $languageManager;
+        $this->renderer = $renderer;
         $this->config = $configFactory->get('wmsettings.settings');
         $this->configEditable = $configFactory->getEditable('wmsettings.settings');
     }
@@ -224,11 +229,12 @@ class WmSettings
                 switch ($type) {
                     case 'textarea':
                         $value = $entity->get($field_name)->first()->getValue();
-                        // TODO: Dep inject renderer here.
-                        $return[$field_name] = check_markup(
-                            $value['value'],
-                            $value['format']
-                        );
+                        $build = [
+                            '#type' => 'processed_text',
+                            '#text' => $value['value'],
+                            '#format' => $value['format'],
+                        ];
+                        $return[$field_name] = $this->renderer->renderInIsolation($build);
                         break;
                     case 'textfield':
                         $return[$field_name] = $entity->get($field_name)->getString();

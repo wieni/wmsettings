@@ -12,6 +12,8 @@ class DeleteForm extends ConfirmFormBase
 {
     /** @var WmSettings */
     protected $wmSettings;
+    /** @var string|null */
+    protected $id;
 
     public static function create(ContainerInterface $container)
     {
