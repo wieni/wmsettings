@@ -2,6 +2,7 @@
 
 namespace Drupal\wmsettings\Service;
 
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Core\Config\Config;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
@@ -38,13 +39,15 @@ class WmSettings
         EntityRepositoryInterface $entityRepository,
         LanguageManagerInterface $languageManager,
         ConfigFactoryInterface $configFactory,
-        RendererInterface $renderer
+        ?RendererInterface $renderer = null
     ) {
         $this->entityTypeBundleInfo = $entityTypeBundleInfo;
         $this->entityTypeManager = $entityTypeManager;
         $this->entityRepository = $entityRepository;
         $this->languageManager = $languageManager;
-        $this->renderer = $renderer;
+        // Falling back keeps subclasses and swapped service definitions that
+        // do not pass the new argument working.
+        $this->renderer = $renderer ?? \Drupal::service('renderer');
         $this->config = $configFactory->get('wmsettings.settings');
         $this->configEditable = $configFactory->getEditable('wmsettings.settings');
     }
@@ -234,7 +237,12 @@ class WmSettings
                             '#text' => $value['value'],
                             '#format' => $value['format'],
                         ];
-                        $return[$field_name] = $this->renderer->renderInIsolation($build);
+                        $return[$field_name] = DeprecationHelper::backwardsCompatibleCall(
+                            \Drupal::VERSION,
+                            '10.3',
+                            fn () => $this->renderer->renderInIsolation($build),
+                            fn () => $this->renderer->renderPlain($build),
+                        );
                         break;
                     case 'textfield':
                         $return[$field_name] = $entity->get($field_name)->getString();
