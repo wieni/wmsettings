@@ -2,6 +2,7 @@
 
 namespace Drupal\wmsettings\Service;
 
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Core\Config\Config;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
@@ -10,6 +11,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\link\Plugin\Field\FieldType\LinkItem;
 
 class WmSettings
@@ -22,6 +24,8 @@ class WmSettings
     protected $entityRepository;
     /** @var LanguageManagerInterface */
     protected $languageManager;
+    /** @var RendererInterface */
+    protected $renderer;
     /** @var ImmutableConfig */
     protected $config;
     /** @var Config */
@@ -34,12 +38,16 @@ class WmSettings
         EntityTypeManagerInterface $entityTypeManager,
         EntityRepositoryInterface $entityRepository,
         LanguageManagerInterface $languageManager,
-        ConfigFactoryInterface $configFactory
+        ConfigFactoryInterface $configFactory,
+        ?RendererInterface $renderer = null
     ) {
         $this->entityTypeBundleInfo = $entityTypeBundleInfo;
         $this->entityTypeManager = $entityTypeManager;
         $this->entityRepository = $entityRepository;
         $this->languageManager = $languageManager;
+        // Falling back keeps subclasses and swapped service definitions that
+        // do not pass the new argument working.
+        $this->renderer = $renderer ?? \Drupal::service('renderer');
         $this->config = $configFactory->get('wmsettings.settings');
         $this->configEditable = $configFactory->getEditable('wmsettings.settings');
     }
@@ -224,10 +232,16 @@ class WmSettings
                 switch ($type) {
                     case 'textarea':
                         $value = $entity->get($field_name)->first()->getValue();
-                        // TODO: Dep inject renderer here.
-                        $return[$field_name] = check_markup(
-                            $value['value'],
-                            $value['format']
+                        $build = [
+                            '#type' => 'processed_text',
+                            '#text' => $value['value'],
+                            '#format' => $value['format'],
+                        ];
+                        $return[$field_name] = DeprecationHelper::backwardsCompatibleCall(
+                            \Drupal::VERSION,
+                            '10.3',
+                            fn () => $this->renderer->renderInIsolation($build),
+                            fn () => $this->renderer->renderPlain($build),
                         );
                         break;
                     case 'textfield':
