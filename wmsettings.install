@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Core\Extension\Requirement\RequirementSeverity;
 use Drupal\Core\Hook\Attribute\LegacyRequirementsHook;
 use Drupal\wmsettings\Field\IndexableBaseFieldDefinition;
 
@@ -27,7 +28,10 @@ function wmsettings_requirements(string $phase)
             'description' => t('The wmsettings module needs a <code>settings</code> entity type. You can use the <a href="@eckModuleUrl">eck module</a> or you can create a custom entity type.', [
                 '@eckModuleUrl' => 'https://www.drupal.org/project/eck',
             ]),
-            'severity' => REQUIREMENT_WARNING,
+            // REQUIREMENT_WARNING is removed in Drupal 12, use the enum on 11.2+.
+            'severity' => class_exists(RequirementSeverity::class)
+                ? RequirementSeverity::Warning
+                : REQUIREMENT_WARNING,
         ];
     }
 
