@@ -1,8 +1,18 @@
 <?php
 
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Core\Hook\Attribute\LegacyRequirementsHook;
 use Drupal\wmsettings\Field\IndexableBaseFieldDefinition;
 
+/**
+ * Implements hook_requirements().
+ *
+ * Drupal 11.2 and later check the same requirements through
+ * WmSettingsRequirements (install) and WmSettingsRequirementsHooks (runtime
+ * and update). #[LegacyRequirementsHook] stops Drupal 11.3 and later from also
+ * invoking this function as a runtime or update requirements hook.
+ */
+#[LegacyRequirementsHook]
 function wmsettings_requirements(string $phase)
 {
     $requirements = [];
