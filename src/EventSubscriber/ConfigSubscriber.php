@@ -23,7 +23,7 @@ class ConfigSubscriber implements EventSubscriberInterface
         $this->wmSettings = $wmSettings;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         $events[ConfigEvents::IMPORT][] = ['onConfigImporterImport', 40];
 
