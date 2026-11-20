@@ -7,12 +7,11 @@ use Drupal\Core\Extension\InstallRequirementsInterface;
 use Drupal\Core\Extension\Requirement\RequirementSeverity;
 
 /**
- * Install time requirements, on Drupal 11.2 and later.
+ * Install time requirements.
  *
  * Core loads this class before the module is installed, so it can't use any
  * other code from this module. WmSettingsRequirementsHooks reuses it for the
- * runtime and update requirements. Older versions of Drupal use
- * wmsettings_requirements() instead.
+ * runtime and update requirements.
  */
 class WmSettingsRequirements implements InstallRequirementsInterface
 {
